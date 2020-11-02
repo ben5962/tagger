@@ -39,6 +39,35 @@ done < <( get_racine ) # BUG redirection attendue s/^/#!/bin/bash
 
 #remove_non_emtpy: succes!
 rfktr_list_funcs(){
-[ $# -eq 1 ] || echo "list_funcs $1"
-sed -n '/\([a-zA-Z_]+\)(){}/\1/p;' "$1"
+#[ $# -eq 1 ] || echo "list_funcs \$1" && return 1;
+#sed -n 's/\(^[a-zA-Z_]*\)(){/\1/p;' "$1"
+#LE_REMPLACEMENT_DE='s/'
+#AFFICHER_SEULEMENT=-n -e '
+#lettre_ou_underscore="[a-zA-Z_]"
+#plusieurs_fois='*'
+#debut_de_ligne='^'
+#debut_important='\('
+#fin_important='\)'
+#sed ${AFFICHER_SEULEMENT} ${EXPRESSION} \
+#${REMPLACER}${debut_de_ligne}${debut_important}${lettre_ou_underscore}\
+#${plusieurs_fois}${fin_important}
+sed -n -e 's/^\([a-zA-Z_]*\)(){/\1/ p;' "$1"
+#sed -n -e 's/^\('${lettre_ou_underscore}'*\)(){/\1/p;' "$1"
+
+}
+export -f rfktr_list_funcs
+
+rfktr_list_all_funcs(){
+find . -type f -execdir bash -c 'rfktr_list_funcs $1' bash {} \;
+}
+
+
+
+rfktr_aff_func(){
+sed -n -e '/'$1'(){/,/^}$/ p;' $2
+}
+
+
+rfktr_whereisfunc(){
+grep -r "$1(){" --files-with-matches
 }
