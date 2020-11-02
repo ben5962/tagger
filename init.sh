@@ -15,6 +15,7 @@ local nom_fichier; nom_fichier=$(basename "$1")
 local tags_dir; tags_dir=$( pwd )/.tags_dir
 local cible; cible="$( pwd )/${nom_fichier}"
 local depuis; depuis="${tags_dir}/untagged_${nom_fichier}"
+declare -F "is_symb_lnk" ||  echo "$FUNCNAME necessite is_symb_lnk"
 echo "depuis vaut: $depuis"
 echo "cible vaut $cible"
 echo "tags_dir vaut $tags_dir"
@@ -76,15 +77,17 @@ find ~+ -type d -name '.tags_dir' -okdir bash -c '_rm_ie $1' bash {} \;
 }
 
 
-trouver_untagged(){
+tg_trouver_untagged(){
 while read lien; do
 readlink -f "$lien"
 done < <( ( locate untagged ) )
 
 }
 
+
+
 #reverse
 
 #reverse #cf refactor
-tg_mkdir_all_ine # [ ! -f toujours vrai  devient [ ! -d
-tg_tag_all_untagged
+#tg_mkdir_all_ine # [ ! -f toujours vrai  devient [ ! -d
+#tg_tag_all_untagged

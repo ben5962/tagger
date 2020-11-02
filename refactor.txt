@@ -1,3 +1,4 @@
+#!/bin/bash
 #corriger les conneries des repertoires recursifs créés
 get_racine(){
 local racine=$(find /home/corentin/ -name .tags_dir -empty -execdir bash -c 'while [ "$(basename $(pwd))" = ".tags_dir" ]; do cd .. ; done; pwd' bash {} \;)
@@ -32,8 +33,12 @@ do
 #echo $chemin
 tree_to_del="$chemin/$(get_rec_dir)"
 [ -d "$tree_to_del" ] && echo "ok" && rm -rf "$tree_to_del"
-done < <( get_racine )
+done < <( get_racine ) # BUG redirection attendue s/^/#!/bin/bash
 
 }
 
 #remove_non_emtpy: succes!
+rfktr_list_funcs(){
+[ $# -eq 1 ] || echo "list_funcs $1"
+sed -n '/\([a-zA-Z_]+\)(){}/\1/p;' "$1"
+}

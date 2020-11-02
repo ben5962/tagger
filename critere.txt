@@ -1,0 +1,1 @@
+ Bourne-Again shell script, UTF-8 Unicode text executable
