@@ -1,0 +1,39 @@
+#corriger les conneries des repertoires recursifs créés
+get_racine(){
+local racine=$(find /home/corentin/ -name .tags_dir -empty -execdir bash -c 'while [ "$(basename $(pwd))" = ".tags_dir" ]; do cd .. ; done; pwd' bash {} \;)
+echo "$racine"
+}
+
+get_rec_dir(){
+echo ".tags_dir"
+}
+
+verif_resultat(){
+find /home/corentin/ -name $(get_rec_dir) -empty
+}
+
+remove_empty(){
+rac="$(get_racine)"
+tree_to_del="${rac}/$(get_rec_dir)"
+[ -d "${tree_to_del}" ] && echo "ok" && rm -fr "${tree_to_del}"
+verif_resultat
+}
+
+
+# remove_empty: succes!
+get_racine(){
+local racine=$(find /home/corentin/ -name .tags_dir -execdir bash -c 'while [ "$(basename $(pwd))" = ".tags_dir" ]; do cd .. ; done; pwd' bash {} \;)
+echo "$racine"
+}
+
+remove_non_empty(){
+while read chemin
+do
+#echo $chemin
+tree_to_del="$chemin/$(get_rec_dir)"
+[ -d "$tree_to_del" ] && echo "ok" && rm -rf "$tree_to_del"
+done < <( get_racine )
+
+}
+
+#remove_non_emtpy: succes!
